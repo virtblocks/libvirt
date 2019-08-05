@@ -792,7 +792,7 @@ sc_prohibit_cross_inclusion:
 	    cpu/| network/| node_device/| rpc/| security/| storage/) \
 	      safe="($$dir|util|conf|storage)";; \
 	    xenapi/) safe="($$dir|util|conf|xen|cpu)";; \
-	    *) safe="($$dir|$(mid_dirs)|util)";; \
+	    *) safe="($$dir|$(mid_dirs)|util|rust)";; \
 	  esac; \
 	  in_vc_files="^src/$$dir" \
 	  prohibit='^# *include .$(cross_dirs_re)' \
