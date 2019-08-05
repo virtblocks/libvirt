@@ -67,7 +67,11 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 
-#include "rust/rust.h"
+#ifdef WITH_VIRTBLOCKS
+# ifdef WITH_VIRTBLOCKS_RUST
+#  include "rust/rust.h"
+# endif /* WITH_VIRTBLOCKS_RUST */
+#endif /* WITH_VIRTBLOCKS */
 
 #define VIR_FROM_THIS VIR_FROM_QEMU
 
@@ -4227,6 +4231,7 @@ qemuBuildWatchdogCommandLine(virCommandPtr cmd,
 }
 
 
+#ifdef WITH_VIRTBLOCKS
 static int
 qemuBuildMemballoonCommandLine(virCommandPtr cmd,
                                const virDomainDef *def,
@@ -4251,6 +4256,15 @@ qemuBuildMemballoonCommandLine(virCommandPtr cmd,
 
     return 0;
 }
+#else /* ! WITH_VIRTBLOCKS */
+static int
+qemuBuildMemballoonCommandLine(virCommandPtr cmd ATTRIBUTE_UNUSED,
+                               const virDomainDef *def ATTRIBUTE_UNUSED,
+                               virQEMUCapsPtr qemuCaps ATTRIBUTE_UNUSED)
+{
+    return -1;
+}
+#endif /* ! WITH_VIRTBLOCKS */
 
 
 static char *
