@@ -4231,7 +4231,7 @@ qemuBuildWatchdogCommandLine(virCommandPtr cmd,
 }
 
 
-#ifdef WITH_VIRTBLOCKS
+#ifdef WITH_VIRTBLOCKS_RUST
 static int
 qemuBuildMemballoonCommandLine(virCommandPtr cmd,
                                const virDomainDef *def,
@@ -4256,7 +4256,7 @@ qemuBuildMemballoonCommandLine(virCommandPtr cmd,
 
     return 0;
 }
-#else /* ! WITH_VIRTBLOCKS */
+#else /* ! WITH_VIRTBLOCKS_RUST */
 static int
 qemuBuildMemballoonCommandLine(virCommandPtr cmd ATTRIBUTE_UNUSED,
                                const virDomainDef *def ATTRIBUTE_UNUSED,
@@ -4264,7 +4264,7 @@ qemuBuildMemballoonCommandLine(virCommandPtr cmd ATTRIBUTE_UNUSED,
 {
     return -1;
 }
-#endif /* ! WITH_VIRTBLOCKS */
+#endif /* ! WITH_VIRTBLOCKS_RUST */
 
 
 static char *
