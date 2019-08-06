@@ -128,6 +128,11 @@ AC_DEFUN([LIBVIRT_COMPILE_WARNINGS],[
     dontwarn="$dontwarn -Wstack-protector"
     dontwarn="$dontwarn -Wsuggest-attribute=malloc"
 
+    # Go doesn't generate strict prototypes for some functions
+    if test "$with_virtblocks" = golang; then
+        dontwarn="$dontwarn -Wstrict-prototypes"
+    fi
+
     # Get all possible GCC warnings
     gl_MANYWARN_ALL_GCC([maybewarn])
 
