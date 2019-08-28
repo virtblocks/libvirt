@@ -129,7 +129,7 @@ AC_DEFUN([LIBVIRT_COMPILE_WARNINGS],[
     dontwarn="$dontwarn -Wsuggest-attribute=malloc"
 
     # Go doesn't generate strict prototypes for some functions
-    if test "$with_virtblocks" = golang; then
+    if test "$with_virtblocks" = go; then
         dontwarn="$dontwarn -Wstrict-prototypes"
     fi
 
