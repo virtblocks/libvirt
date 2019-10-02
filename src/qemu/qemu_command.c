@@ -69,6 +69,8 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 
+#include "virtblocks_glue/virtblocks_glue.h"
+
 #define VIR_FROM_THIS VIR_FROM_QEMU
 
 VIR_LOG_INIT("qemu.qemu_command");
@@ -10284,6 +10286,12 @@ qemuBuildCommandLine(virQEMUDriverPtr driver,
     virDomainDefPtr def = vm->def;
     virQEMUCapsPtr qemuCaps = priv->qemuCaps;
     bool chardevStdioLogd = priv->chardevStdioLogd;
+#if WITH_VIRTBLOCKS
+    VIR_AUTOPTR(VirtBlocksVmDescription) virtBlocksVm = NULL;
+    VIR_AUTOPTR(VirtBlocksArray) args = NULL;
+    VIR_AUTOPTR(VirtBlocksError) err = NULL;
+    unsigned int nArgs;
+#endif /* WITH_VIRTBLOCKS */
 
     VIR_DEBUG("driver=%p def=%p mon=%p "
               "qemuCaps=%p migrateURI=%s snapshot=%p vmop=%d",
@@ -10536,7 +10544,56 @@ qemuBuildCommandLine(virQEMUDriverPtr driver,
         cfg->logTimestamp)
         virCommandAddArgList(cmd, "-msg", "timestamp=on", NULL);
 
+#if WITH_VIRTBLOCKS
+
+    /* The code above is left untouched for two reasons:
+     *
+     *   1) libvirt performs some initialization tasks during QEMU command
+     *      line generation, and skipping them would result in failure to
+     *      start the domain while factoring them out would require too
+     *      much effort;
+     *
+     *   2) this way functions won't be considered unused by the compiler
+     *      and we don't have to delete them or comment them out.
+     *
+     * Once the original code has finished running, we can drop the
+     * virCommand instance that's been prepared in the process and hand
+     * over to Virt Blocks */
+
+    virCommandFree(cmd);
+
+    if (virDomainConvertToVirtBlocks(def, &virtBlocksVm) < 0)
+        return NULL;
+
+    args = virtblocks_vm_description_get_qemu_commandline(virtBlocksVm, &err);
+    if (err) {
+        VIR_DEBUG("domain=%d, code=%d, message=%s",
+                  virtblocks_error_get_domain(err),
+                  virtblocks_error_get_code(err),
+                  virtblocks_error_get_message(err));
+        return NULL;
+    }
+
+    nArgs = virtblocks_array_get_length(args);
+    if (nArgs < 1)
+        return NULL;
+
+    cmd = virCommandNew(virtblocks_array_get_item(args, 0));
+    for (i = 1; i < nArgs; i++)
+        virCommandAddArg(cmd, virtblocks_array_get_item(args, i));
+
+    /* libvirt expects the QEMU process to start with its CPUs stopped,
+     * so we need to add this on top of what Virt Blocks has generated */
+    virCommandAddArg(cmd, "-S");
+
+    /* Virt Blocks doesn't set up the QMP monitor yet, so we let libvirt
+     * take care of this part */
+    if (qemuBuildMonitorCommandLine(logManager, secManager, cmd, cfg, def, priv) < 0)
+        return NULL;
+
     return g_steal_pointer(&cmd);
+
+#endif /* WITH_VIRTBLOCKS */
 }
 
 
