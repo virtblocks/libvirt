@@ -4477,6 +4477,14 @@ virQEMUCapsInitProcessCaps(virQEMUCapsPtr qemuCaps)
 
     if (virQEMUCapsGet(qemuCaps, QEMU_CAPS_CPU_UNAVAILABLE_FEATURES))
         virQEMUCapsSet(qemuCaps, QEMU_CAPS_CANONICAL_CPU_FEATURES);
+
+#if WITH_VIRTBLOCKS
+
+    /* Pretend QEMU doesn't support FD passing since Virt Blocks doesn't
+     * know how to use the feature */
+    virQEMUCapsClear(qemuCaps, QEMU_CAPS_CHARDEV_FD_PASS);
+
+#endif /* WITH_VIRTBLOCKS */
 }
 
 

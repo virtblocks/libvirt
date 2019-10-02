@@ -20,7 +20,8 @@ file=/tmp/lib/domain--1-guest/master-key.aes \
 -display none \
 -no-user-config \
 -nodefaults \
--chardev socket,id=charmonitor,fd=1729,server,nowait \
+-chardev socket,id=charmonitor,path=/tmp/lib/domain--1-guest/monitor.sock,\
+server,nowait \
 -mon chardev=charmonitor,id=monitor,mode=control \
 -rtc base=utc \
 -no-shutdown \
@@ -33,7 +34,8 @@ addr=0x1 \
 id=drive-virtio-disk0 \
 -device virtio-blk-pci,scsi=off,bus=pci.1,addr=0x0,drive=drive-virtio-disk0,\
 id=virtio-disk0,bootindex=1 \
--chardev socket,id=charserial0,fd=1729,server,nowait \
+-chardev socket,id=charserial0,\
+path=/var/lib/libvirt/qemu/channel/target/domain-1-guest/console,server,nowait \
 -device isa-serial,chardev=charserial0,id=serial0 \
 -sandbox on,obsolete=deny,elevateprivileges=deny,spawn=deny,\
 resourcecontrol=deny \

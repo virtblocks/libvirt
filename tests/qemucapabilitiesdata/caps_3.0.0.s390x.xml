@@ -114,7 +114,6 @@
   <flag name='screendump_device'/>
   <flag name='blockdev-del'/>
   <flag name='vhost-vsock'/>
-  <flag name='chardev-fd-pass'/>
   <flag name='tpm-emulator'/>
   <flag name='egl-headless'/>
   <flag name='vfio-pci.display'/>
