@@ -22,10 +22,12 @@ libvirt_virtblocks_glue_la_SOURCES += \
 
 libvirt_virtblocks_glue_la_CFLAGS = \
 	$(VIRTBLOCKS_CFLAGS) \
+	$(GLIB_CFLAGS) \
 	$(LIBXML_CFLAGS) \
 	$(NULL)
 libvirt_virtblocks_glue_la_LIBADD = \
 	$(VIRTBLOCKS_LIBS) \
+	$(GLIB_LIBS) \
 	$(NULL)
 
 VIRTBLOCKS_PHONY_TARGETS += \
