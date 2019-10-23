@@ -32,9 +32,9 @@ G_DEFINE_AUTOPTR_CLEANUP_FUNC(VirtBlocksArray,
                               virtblocks_array_free);
 G_DEFINE_AUTOPTR_CLEANUP_FUNC(VirtBlocksVmDescription,
                               virtblocks_vm_description_free);
-G_DEFINE_AUTOPTR_CLEANUP_FUNC(VirtBlocksDevicesDisk,
-                              virtblocks_devices_disk_free);
-G_DEFINE_AUTOPTR_CLEANUP_FUNC(VirtBlocksDevicesSerial,
-                              virtblocks_devices_serial_free);
-G_DEFINE_AUTOPTR_CLEANUP_FUNC(VirtBlocksDevicesMemballoon,
-                              virtblocks_devices_memballoon_free);
+G_DEFINE_AUTOPTR_CLEANUP_FUNC(VirtBlocksVmDisk,
+                              virtblocks_vm_disk_free);
+G_DEFINE_AUTOPTR_CLEANUP_FUNC(VirtBlocksVmSerial,
+                              virtblocks_vm_serial_free);
+G_DEFINE_AUTOPTR_CLEANUP_FUNC(VirtBlocksVmMemballoon,
+                              virtblocks_vm_memballoon_free);

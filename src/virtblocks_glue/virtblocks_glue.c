@@ -11,9 +11,9 @@ VIR_LOG_INIT("virtblocks");
 
 static int
 virDomainConvertToVirtBlocksSerial(virDomainDef *from,
-                                   VirtBlocksDevicesSerial **to)
+                                   VirtBlocksVmSerial **to)
 {
-    g_autoptr(VirtBlocksDevicesSerial) serial = NULL;
+    g_autoptr(VirtBlocksVmSerial) serial = NULL;
     virDomainChrDef *fromSerial = NULL;
 
     if (from->nserials != 1)
@@ -27,9 +27,9 @@ virDomainConvertToVirtBlocksSerial(virDomainDef *from,
         return -1;
     }
 
-    serial = virtblocks_devices_serial_new();
-    virtblocks_devices_serial_set_path(serial,
-                                       fromSerial->source->data.nix.path);
+    serial = virtblocks_vm_serial_new();
+    virtblocks_vm_serial_set_path(serial,
+                                  fromSerial->source->data.nix.path);
 
     *to = g_steal_pointer(&serial);
 
@@ -38,9 +38,9 @@ virDomainConvertToVirtBlocksSerial(virDomainDef *from,
 
 static int
 virDomainConvertToVirtBlocksDisk(virDomainDef *from,
-                                 VirtBlocksDevicesDisk **to)
+                                 VirtBlocksVmDisk **to)
 {
-    g_autoptr(VirtBlocksDevicesDisk) disk = NULL;
+    g_autoptr(VirtBlocksVmDisk) disk = NULL;
     virDomainDiskDef *fromDisk = NULL;
 
     if (from->ndisks != 1)
@@ -56,9 +56,9 @@ virDomainConvertToVirtBlocksDisk(virDomainDef *from,
         return -1;
     }
 
-    disk = virtblocks_devices_disk_new();
-    virtblocks_devices_disk_set_filename(disk,
-                                         virDomainDiskGetSource(fromDisk));
+    disk = virtblocks_vm_disk_new();
+    virtblocks_vm_disk_set_filename(disk,
+                                    virDomainDiskGetSource(fromDisk));
 
     *to = g_steal_pointer(&disk);
 
@@ -70,10 +70,10 @@ virDomainConvertToVirtBlocks(virDomainDef *from,
                              VirtBlocksVmDescription **to)
 {
     g_autoptr(VirtBlocksVmDescription) vm = NULL;
-    g_autoptr(VirtBlocksDevicesDisk) disk = NULL;
-    g_autoptr(VirtBlocksDevicesSerial) serial = NULL;
+    g_autoptr(VirtBlocksVmDisk) disk = NULL;
+    g_autoptr(VirtBlocksVmSerial) serial = NULL;
 
-    vm = virtblocks_vm_description_new();
+    vm = virtblocks_vm_description_new(VIRTBLOCKS_VM_MODEL_LEGACY_V1);
 
     if (virDomainConvertToVirtBlocksDisk(from, &disk) < 0 ||
         virDomainConvertToVirtBlocksSerial(from, &serial) < 0) {
@@ -81,7 +81,8 @@ virDomainConvertToVirtBlocks(virDomainDef *from,
     }
 
     virtblocks_vm_description_set_emulator(vm, from->emulator);
-    virtblocks_vm_description_set_disk(vm, disk);
+    virtblocks_vm_description_set_disk_slots(vm, 1);
+    virtblocks_vm_description_set_disk_for_slot(vm, disk, 0);
     virtblocks_vm_description_set_serial(vm, serial);
 
     /* These only work for the simplest of cases */

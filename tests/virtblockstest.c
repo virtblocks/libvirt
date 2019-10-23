@@ -10,22 +10,22 @@ typedef enum {
 } testFlags;
 
 typedef struct {
-    VirtBlocksDevicesMemballoonModel model;
+    VirtBlocksVmMemballoonModel model;
     const char *expect;
     unsigned int flags;
 } testInfo;
 
 static int
-testVirtBlocksDevicesMemballoon(const void *opaque)
+testVirtBlocksVmMemballoon(const void *opaque)
 {
     testInfo *info = (testInfo *) opaque;
-    g_autoptr(VirtBlocksDevicesMemballoon) memballoon = NULL;
+    g_autoptr(VirtBlocksVmMemballoon) memballoon = NULL;
     g_autofree char *actual = NULL;
 
-    memballoon = virtblocks_devices_memballoon_new();
+    memballoon = virtblocks_vm_memballoon_new();
 
-    virtblocks_devices_memballoon_set_model(memballoon, info->model);
-    actual = virtblocks_devices_memballoon_to_string(memballoon);
+    virtblocks_vm_memballoon_set_model(memballoon, info->model);
+    actual = virtblocks_vm_memballoon_to_string(memballoon);
 
     if (!STREQ_NULLABLE(info->expect, actual)) {
         virTestDifference(stderr, info->expect, actual);
@@ -45,7 +45,7 @@ testVirtBlocksDevicesMemballoon(const void *opaque)
             .flags = _flags, \
         }; \
         if (virTestRun("devices::Memballoon", \
-                       testVirtBlocksDevicesMemballoon, &info) < 0) { \
+                       testVirtBlocksVmMemballoon, &info) < 0) { \
             ret = -1; \
         } \
     } while (0);
@@ -58,12 +58,12 @@ mymain(void)
 {
     int ret = 0;
 
-    DO_TEST_BALLOON(VIRTBLOCKS_DEVICES_MEMBALLOON_MODEL_NONE, "");
-    DO_TEST_BALLOON(VIRTBLOCKS_DEVICES_MEMBALLOON_MODEL_VIRTIO,
+    DO_TEST_BALLOON(VIRTBLOCKS_VM_MEMBALLOON_MODEL_NONE, "");
+    DO_TEST_BALLOON(VIRTBLOCKS_VM_MEMBALLOON_MODEL_VIRTIO,
                     "virtio-memballoon");
-    DO_TEST_BALLOON(VIRTBLOCKS_DEVICES_MEMBALLOON_MODEL_VIRTIO_NON_TRANSITIONAL,
+    DO_TEST_BALLOON(VIRTBLOCKS_VM_MEMBALLOON_MODEL_VIRTIO_NON_TRANSITIONAL,
                     "virtio-memballoon-non-transitional");
-    DO_TEST_BALLOON(VIRTBLOCKS_DEVICES_MEMBALLOON_MODEL_VIRTIO_TRANSITIONAL,
+    DO_TEST_BALLOON(VIRTBLOCKS_VM_MEMBALLOON_MODEL_VIRTIO_TRANSITIONAL,
                     "virtio-memballoon-transitional");
 
     return ret == 0 ? EXIT_SUCCESS : EXIT_FAILURE;
