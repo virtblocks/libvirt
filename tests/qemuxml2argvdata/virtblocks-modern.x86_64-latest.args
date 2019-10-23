@@ -1,0 +1,18 @@
+/usr/bin/qemu-system-x86_64 \
+-nodefaults \
+-no-user-config \
+-display none \
+-machine accel=kvm:tcg \
+-smp 4 \
+-m 4096 \
+-machine pc \
+-drive file=/var/lib/libvirt/images/guest.qcow2,format=qcow2,if=none,id=drive0 \
+-device virtio-blk-pci,drive=drive0,bus=pci.0,addr=3,id=disk0 \
+-chardev socket,\
+path=/var/lib/libvirt/qemu/channel/target/domain-1-guest/console,server,nowait,\
+id=serial0 \
+-device isa-serial,chardev=serial0 \
+-S \
+-chardev socket,id=charmonitor,path=/tmp/lib/domain--1-guest/monitor.sock,\
+server,nowait \
+-mon chardev=charmonitor,id=monitor,mode=control

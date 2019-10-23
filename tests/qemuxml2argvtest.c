@@ -3021,6 +3021,7 @@ mymain(void)
 # endif
 
     DO_TEST_CAPS_ARCH_LATEST("virtblocks-legacy", "x86_64");
+    DO_TEST_CAPS_ARCH_LATEST("virtblocks-modern", "x86_64");
 
     if (getenv("LIBVIRT_SKIP_CLEANUP") == NULL)
         virFileDeleteTree(fakerootdir);
