@@ -4113,7 +4113,7 @@ qemuBuildMemballoonCommandLine(virCommandPtr cmd,
                                const virDomainDef *def,
                                virQEMUCapsPtr qemuCaps)
 {
-    VIR_AUTOCLEAN(virBuffer) buf = VIR_BUFFER_INITIALIZER;
+    g_auto(virBuffer) buf = VIR_BUFFER_INITIALIZER;
 
     if (!virDomainDefHasMemballoon(def))
         return 0;
@@ -10287,9 +10287,9 @@ qemuBuildCommandLine(virQEMUDriverPtr driver,
     virQEMUCapsPtr qemuCaps = priv->qemuCaps;
     bool chardevStdioLogd = priv->chardevStdioLogd;
 #if WITH_VIRTBLOCKS
-    VIR_AUTOPTR(VirtBlocksVmDescription) virtBlocksVm = NULL;
-    VIR_AUTOPTR(VirtBlocksArray) args = NULL;
-    VIR_AUTOPTR(VirtBlocksError) err = NULL;
+    g_autoptr(VirtBlocksVmDescription) virtBlocksVm = NULL;
+    g_autoptr(VirtBlocksArray) args = NULL;
+    g_autoptr(VirtBlocksError) err = NULL;
     unsigned int nArgs;
 #endif /* WITH_VIRTBLOCKS */
 

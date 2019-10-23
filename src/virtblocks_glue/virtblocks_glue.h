@@ -26,15 +26,15 @@
 int virDomainConvertToVirtBlocks(virDomainDef *from,
                                  VirtBlocksVmDescription **to);
 
-VIR_DEFINE_AUTOPTR_FUNC(VirtBlocksError,
-                        virtblocks_error_free);
-VIR_DEFINE_AUTOPTR_FUNC(VirtBlocksArray,
-                        virtblocks_array_free);
-VIR_DEFINE_AUTOPTR_FUNC(VirtBlocksVmDescription,
-                        virtblocks_vm_description_free);
-VIR_DEFINE_AUTOPTR_FUNC(VirtBlocksDevicesDisk,
-                        virtblocks_devices_disk_free);
-VIR_DEFINE_AUTOPTR_FUNC(VirtBlocksDevicesSerial,
-                        virtblocks_devices_serial_free);
-VIR_DEFINE_AUTOPTR_FUNC(VirtBlocksDevicesMemballoon,
-                        virtblocks_devices_memballoon_free);
+G_DEFINE_AUTOPTR_CLEANUP_FUNC(VirtBlocksError,
+                              virtblocks_error_free);
+G_DEFINE_AUTOPTR_CLEANUP_FUNC(VirtBlocksArray,
+                              virtblocks_array_free);
+G_DEFINE_AUTOPTR_CLEANUP_FUNC(VirtBlocksVmDescription,
+                              virtblocks_vm_description_free);
+G_DEFINE_AUTOPTR_CLEANUP_FUNC(VirtBlocksDevicesDisk,
+                              virtblocks_devices_disk_free);
+G_DEFINE_AUTOPTR_CLEANUP_FUNC(VirtBlocksDevicesSerial,
+                              virtblocks_devices_serial_free);
+G_DEFINE_AUTOPTR_CLEANUP_FUNC(VirtBlocksDevicesMemballoon,
+                              virtblocks_devices_memballoon_free);

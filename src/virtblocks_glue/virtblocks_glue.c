@@ -13,7 +13,7 @@ static int
 virDomainConvertToVirtBlocksSerial(virDomainDef *from,
                                    VirtBlocksDevicesSerial **to)
 {
-    VIR_AUTOPTR(VirtBlocksDevicesSerial) serial = NULL;
+    g_autoptr(VirtBlocksDevicesSerial) serial = NULL;
     virDomainChrDef *fromSerial = NULL;
 
     if (from->nserials != 1)
@@ -31,7 +31,7 @@ virDomainConvertToVirtBlocksSerial(virDomainDef *from,
     virtblocks_devices_serial_set_path(serial,
                                        fromSerial->source->data.nix.path);
 
-    VIR_STEAL_PTR(*to, serial);
+    *to = g_steal_pointer(&serial);
 
     return 0;
 }
@@ -40,7 +40,7 @@ static int
 virDomainConvertToVirtBlocksDisk(virDomainDef *from,
                                  VirtBlocksDevicesDisk **to)
 {
-    VIR_AUTOPTR(VirtBlocksDevicesDisk) disk = NULL;
+    g_autoptr(VirtBlocksDevicesDisk) disk = NULL;
     virDomainDiskDef *fromDisk = NULL;
 
     if (from->ndisks != 1)
@@ -60,7 +60,7 @@ virDomainConvertToVirtBlocksDisk(virDomainDef *from,
     virtblocks_devices_disk_set_filename(disk,
                                          virDomainDiskGetSource(fromDisk));
 
-    VIR_STEAL_PTR(*to, disk);
+    *to = g_steal_pointer(&disk);
 
     return 0;
 }
@@ -69,9 +69,9 @@ int
 virDomainConvertToVirtBlocks(virDomainDef *from,
                              VirtBlocksVmDescription **to)
 {
-    VIR_AUTOPTR(VirtBlocksVmDescription) vm = NULL;
-    VIR_AUTOPTR(VirtBlocksDevicesDisk) disk = NULL;
-    VIR_AUTOPTR(VirtBlocksDevicesSerial) serial = NULL;
+    g_autoptr(VirtBlocksVmDescription) vm = NULL;
+    g_autoptr(VirtBlocksDevicesDisk) disk = NULL;
+    g_autoptr(VirtBlocksDevicesSerial) serial = NULL;
 
     vm = virtblocks_vm_description_new();
 
@@ -88,7 +88,7 @@ virDomainConvertToVirtBlocks(virDomainDef *from,
     virtblocks_vm_description_set_cpus(vm, virDomainDefGetVcpusMax(from));
     virtblocks_vm_description_set_memory(vm, virDomainDefGetMemoryInitial(from) / 1024);
 
-    VIR_STEAL_PTR(*to, vm);
+    *to = g_steal_pointer(&vm);
 
     return 0;
 

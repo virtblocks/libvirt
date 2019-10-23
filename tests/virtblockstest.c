@@ -19,8 +19,8 @@ static int
 testVirtBlocksDevicesMemballoon(const void *opaque)
 {
     testInfo *info = (testInfo *) opaque;
-    VIR_AUTOPTR(VirtBlocksDevicesMemballoon) memballoon = NULL;
-    VIR_AUTOFREE(char *) actual = NULL;
+    g_autoptr(VirtBlocksDevicesMemballoon) memballoon = NULL;
+    g_autofree char *actual = NULL;
 
     memballoon = virtblocks_devices_memballoon_new();
 
