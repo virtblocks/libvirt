@@ -3020,7 +3020,7 @@ mymain(void)
     DO_TEST_CAPS_LATEST("vhost-user-gpu-secondary");
 # endif
 
-    DO_TEST_CAPS_ARCH_LATEST("virtblocks", "x86_64");
+    DO_TEST_CAPS_ARCH_LATEST("virtblocks-legacy", "x86_64");
 
     if (getenv("LIBVIRT_SKIP_CLEANUP") == NULL)
         virFileDeleteTree(fakerootdir);

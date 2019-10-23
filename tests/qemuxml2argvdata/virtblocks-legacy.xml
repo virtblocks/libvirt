@@ -4,7 +4,7 @@
   <memory>4194304</memory>
   <vcpu>4</vcpu>
   <os>
-    <type arch='x86_64' machine='q35'>hvm</type>
+    <type arch='x86_64' machine='pc'>hvm</type>
   </os>
   <devices>
     <emulator>/usr/bin/qemu-system-x86_64</emulator>
