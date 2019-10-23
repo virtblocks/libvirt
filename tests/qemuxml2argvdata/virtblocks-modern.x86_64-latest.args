@@ -5,9 +5,10 @@
 -machine accel=kvm:tcg \
 -smp 4 \
 -m 4096 \
--machine pc \
+-machine q35 \
+-device pcie-root-port,bus=pcie.0,addr=1,chassis=0,id=diskslot0 \
 -drive file=/var/lib/libvirt/images/guest.qcow2,format=qcow2,if=none,id=drive0 \
--device virtio-blk-pci,drive=drive0,bus=pci.0,addr=3,id=disk0 \
+-device virtio-blk-pci,drive=drive0,bus=diskslot0,addr=0,id=disk0 \
 -chardev socket,\
 path=/var/lib/libvirt/qemu/channel/target/domain-1-guest/console,server,nowait,\
 id=serial0 \

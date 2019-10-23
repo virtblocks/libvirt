@@ -72,8 +72,17 @@ virDomainConvertToVirtBlocks(virDomainDef *from,
     g_autoptr(VirtBlocksVmDescription) vm = NULL;
     g_autoptr(VirtBlocksVmDisk) disk = NULL;
     g_autoptr(VirtBlocksVmSerial) serial = NULL;
+    VirtBlocksVmModel model;
 
-    vm = virtblocks_vm_description_new(VIRTBLOCKS_VM_MODEL_LEGACY_V1);
+    if (STRPREFIX(from->os.machine, "pc")) {
+        model = VIRTBLOCKS_VM_MODEL_LEGACY_V1;
+    } else if (STRPREFIX(from->os.machine, "q35")) {
+        model = VIRTBLOCKS_VM_MODEL_MODERN_V1;
+    } else {
+        goto error;
+    }
+
+    vm = virtblocks_vm_description_new(model);
 
     if (virDomainConvertToVirtBlocksDisk(from, &disk) < 0 ||
         virDomainConvertToVirtBlocksSerial(from, &serial) < 0) {
